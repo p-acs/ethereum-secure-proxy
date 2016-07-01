@@ -56,5 +56,10 @@ public enum AllowedCommand {
     eth_sendRawTransaction,
     eth_syncing,
     eth_uninstallFilter,
-    net_version
+    net_version,
+    trace_block,
+    trace_filter,
+    trace_get,
+    trace_transaction,
+    web3_clientVersion
 }
