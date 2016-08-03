@@ -20,7 +20,7 @@ It offers 3 endpoints:
 
 ###When your node is not running in docker
 
-    docker run  -p 80:8080 -d pacs/ethereum-secure-proxy:1.0.0 --url http://ETHEREUM-NODE-IP:PORT
+    docker run  -p 80:8080 -d pacs/ethereum-secure-proxy --url http://ETHEREUM-NODE-IP:PORT
 
 
 ###When your node is running in docker
@@ -28,7 +28,7 @@ It offers 3 endpoints:
 This assumes that you named the container exposing the RPC endpoint "ethereum-node"
 
 
-    docker run -p 80:8080 --link ethereum-node:ethereum-node  -d pacs/ethereum-secure-proxy:1.0.0 --url http://ethereum-node:PORT
+    docker run -p 80:8080 --link ethereum-node:ethereum-node  -d pacs/ethereum-secure-proxy --url http://ethereum-node:PORT
 
 ###Full Example
 
@@ -49,7 +49,7 @@ Make sure to only expose the network listening port to the host and not the RPC 
 
 Dont' forget to add "--rm" which will remove the container automatically as soon as it exists
    
-    docker run --rm -it --link ethereum-node:ethereum-node -v ethereum-proxy-key:/root/seccoco-secured pacs/ethereum-secure-proxy:1.0.0 --url http://ethereum-node:8545
+    docker run --rm -it --link ethereum-node:ethereum-node -v ethereum-proxy-key:/root/seccoco-secured pacs/ethereum-secure-proxy --url http://ethereum-node:8545
 
 When you see this line __Application password:__ write down the password and kill the container (e.g. by pressing Ctrl+C)
    
@@ -81,7 +81,7 @@ Hint: to make sure that at no point in time the password can leak you should do 
 
 ### Run the proxy
 
-    docker run -it --link ethereum-node:ethereum-node -v ethereum-proxy-key:/root/seccoco-secured pacs/ethereum-secure-proxy:1.0.0 --url http://ethereum-node:8545
+    docker run -it --link ethereum-node:ethereum-node -v ethereum-proxy-key:/root/seccoco-secured pacs/ethereum-secure-proxy --url http://ethereum-node:8545
 
 This line will appear: "[Enter application password:]"
 Paste the password you wrote down before.

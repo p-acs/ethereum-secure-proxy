@@ -43,6 +43,7 @@ import java.io.Console;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.HashMap;
 
 
 @Configuration
@@ -103,7 +104,9 @@ public class Application {
             System.out.println("Connecting to Ethereum RPC at " + cmdLineResult.getUrl());
             URL url = new URL(cmdLineResult.getUrl());
             jsonRpcHttpClient = new JsonRpcHttpClient(url);
-            jsonRpcHttpClient.invoke("eth_protocolVersion", null, String.class);
+            HashMap<String,String> header = new HashMap<String,String>();
+            header.put("Content-Type","application/json");
+            jsonRpcHttpClient.invoke("eth_protocolVersion", null,Object.class,header);
             System.out.println("Connection succeeded");
         } catch (Throwable e) {
             System.out.println("Connection failed: " + e.getMessage());

@@ -37,6 +37,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping("/secure")
@@ -87,7 +88,9 @@ public class SecureController {
         try {
             WrappedRequest wrappedRequest = objectMapper.readValue(bytes, WrappedRequest.class);
             AllowedCommand allowedCommand = AllowedCommand.valueOf(wrappedRequest.getCommand());
-            Object response = rpcClient.invoke(allowedCommand.toString(), wrappedRequest.getParameters(), Object.class);
+            HashMap<String,String> header = new HashMap<String,String>();
+            header.put("Content-Type","application/json");
+            Object response = rpcClient.invoke(allowedCommand.toString(), wrappedRequest.getParameters(), Object.class,header);
             wrappedResponse.setResponse(response);
             wrappedResponse.setSuccess(true);
         } catch (Throwable e) {
