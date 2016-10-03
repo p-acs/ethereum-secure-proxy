@@ -1,3 +1,33 @@
+# TL,DR
+
+Secure a Proof of Authority Chain and connect [Ethereum Android](https://ethereum-android.com) to it:
+
+## Deploy Chain and Proxy
+
+    docker run --name poa-test-chain -d pacs/poa-test-chain
+    docker run --rm --link poa-test-chain:poa-test-chain -p 80:8080 pacs/ethereum-secure-proxy --url http://poa-test-chain:8545
+    
+## Install Ethereum Android 
+   
+   [https://play.google.com/store/apps/details?id=de.petendi.ethereum.android](https://play.google.com/store/apps/details?id=de.petendi.ethereum.android) or
+   
+   [market://details:?id=de.petendi.ethereum.android](market://details:?id=de.petendi.ethereum.android)
+    
+## Import one of these identities
+   
+   [0x410da7e24dffa7b1264669f0ee7b90f6f3a47fe3](sample/test-pre1.pdf)
+   
+   [0xed93808d0c46e3ba9bb89e75dd7b3234448e7fe2](sample/test-pre2.pdf)
+   
+   [0x8c7f8c41833ae2afef5662b1200318b6472252bd](sample/test-pre3.pdf)
+   
+## Connect own node
+
+Use the IP-Address of your Docker host (http://DOCKER-HOST-IP)
+
+Now you should have plenty of Testether to play with :-)
+   
+
 # Overview
 
 Ethereum secure proxy is a tool to secure your Ethereum node easily.
@@ -10,10 +40,11 @@ It offers 3 endpoints:
 
 + __/[ROOT]__ renders a HTML page containing the fingerprint of the certificate so that clients can do certificate pinning by scanning the QR code or by comparing the displayed characters
 + __/identity__ offers the PEM formatted certificate the client should download to compute the certificate fingerprint, encrypt messages to the proxy and verify the received messages 
-+ __/secure__  receives encrypted requests which are then forwarded to the Ethereum node and send back signed and encrypted to the client
++ __/secure__  receives encrypted requests which are then forwarded to the Ethereum node and sent back signed and encrypted to the client
 
 
 #Usage
+
 
 ##Docker
 
@@ -32,7 +63,7 @@ This assumes that you named the container exposing the RPC endpoint "ethereum-no
 
 ###Full Example
 
-This example uses [Geth](https://hub.docker.com/r/ethereum/client-go/) and shows how to setup the proxy for productive environments including backup and migration to other hosts.
+This example uses [Parity](https://ethcore.io/parity.html) and shows how to set up the proxy for productive environments including backup and migration to other hosts.
 
 
 #### Create a volume which will hold the container certificate
@@ -43,7 +74,8 @@ This example uses [Geth](https://hub.docker.com/r/ethereum/client-go/) and shows
 
 Make sure to only expose the network listening port to the host and not the RPC port
    
-    docker run -d -p 30303:30303 --name ethereum-node ethereum/client-go --rpc --rpcaddr "0.0.0.0"
+    docker run -d -p 30303:30303 --name ethereum-node pacs/parity-homestead
+   
    
 #### Run the proxy only to generate the container certificate
 
