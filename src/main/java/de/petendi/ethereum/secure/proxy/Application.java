@@ -107,6 +107,9 @@ public class Application {
             HashMap<String,String> header = new HashMap<String,String>();
             header.put("Content-Type","application/json");
             jsonRpcHttpClient.invoke("eth_protocolVersion", null,Object.class,header);
+            if (cmdLineResult.isExposeWhisper()) {
+                jsonRpcHttpClient.invoke("shh_version", null, Object.class, header);
+            }
             System.out.println("Connection succeeded");
         } catch (Throwable e) {
             System.out.println("Connection failed: " + e.getMessage());
@@ -142,5 +145,10 @@ public class Application {
     @Bean
     public JsonRpcHttpClient rpcClient() throws Throwable {
         return jsonRpcHttpClient;
+    }
+
+    @Bean
+    public Settings settings() {
+        return new Settings(cmdLineResult.isExposeWhisper());
     }
 }
