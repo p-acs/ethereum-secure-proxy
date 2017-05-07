@@ -40,6 +40,9 @@ public class CmdLineResult {
     @Option(name = "--url", required = true, usage = "The url to the Ethereum RPC endpoint", metaVar = "required")
     private String url;
 
+    @Option(name = "--exposeWhisper", required = false, usage = "Expose whisper (shh) RPC commands", metaVar = "optional")
+    private boolean exposeWhisper = false;
+
 
     void parseArguments(String[] arguments) throws CmdLineException {
         CmdLineParser parser = new CmdLineParser(this);
@@ -66,5 +69,9 @@ public class CmdLineResult {
 
     public String getUrl() {
         return url;
+    }
+
+    public boolean isExposeWhisper() {
+        return exposeWhisper;
     }
 }

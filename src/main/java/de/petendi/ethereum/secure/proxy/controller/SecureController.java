@@ -24,6 +24,7 @@ package de.petendi.ethereum.secure.proxy.controller;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
+import de.petendi.ethereum.secure.proxy.Settings;
 import de.petendi.ethereum.secure.proxy.model.AllowedCommand;
 import de.petendi.ethereum.secure.proxy.model.WrappedRequest;
 import de.petendi.ethereum.secure.proxy.model.WrappedResponse;
@@ -45,11 +46,13 @@ public class SecureController {
 
     private Seccoco seccoco;
     private JsonRpcHttpClient rpcClient;
+    private Settings settings;
 
     @Autowired
-    public SecureController(Seccoco seccoco, JsonRpcHttpClient rpcClient) {
+    public SecureController(Seccoco seccoco, JsonRpcHttpClient rpcClient,Settings settings) {
         this.seccoco = seccoco;
         this.rpcClient = rpcClient;
+        this.settings = settings;
     }
 
 
@@ -88,6 +91,9 @@ public class SecureController {
         try {
             WrappedRequest wrappedRequest = objectMapper.readValue(bytes, WrappedRequest.class);
             AllowedCommand allowedCommand = AllowedCommand.valueOf(wrappedRequest.getCommand());
+            if (wrappedRequest.getCommand().startsWith("shh_") && !settings.isWhisperAllowed()) {
+                throw new SecurityException("command not allowed: " + wrappedRequest.getCommand());
+            }
             HashMap<String,String> header = new HashMap<String,String>();
             header.put("Content-Type","application/json");
             Object response = rpcClient.invoke(allowedCommand.toString(), wrappedRequest.getParameters(), Object.class,header);
