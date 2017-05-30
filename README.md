@@ -43,25 +43,25 @@ It offers 3 endpoints:
 + __/secure__  receives encrypted requests which are then forwarded to the Ethereum node and sent back signed and encrypted to the client
 
 
-#Usage
+# Usage
 
 
-##Docker
+## Docker
 
 
-###When your node is not running in docker
+### When your node is not running in docker
 
     docker run  -p 80:8080 -d pacs/ethereum-secure-proxy --url http://ETHEREUM-NODE-IP:PORT
 
 
-###When your node is running in docker
+### When your node is running in docker
 
 This assumes that you named the container exposing the RPC endpoint "ethereum-node"
 
 
     docker run -p 80:8080 --link ethereum-node:ethereum-node  -d pacs/ethereum-secure-proxy --url http://ethereum-node:PORT
 
-###Full Example
+### Full Example
 
 This example uses [Parity](https://ethcore.io/parity.html) and shows how to set up the proxy for productive environments including backup and migration to other hosts.
 
@@ -121,20 +121,20 @@ Send the container in background (e.g. by pressing the sequence Ctrl+P,Ctrl+Q)
 
 Done.
 
-##No Docker
+## No Docker
 
-###Make sure your Java version is compliant
+### Make sure your Java version is compliant
 
 You need at least Java 7.
 
 If you use Oracle Java, it needs to have the __Unlimited Strength Jurisdiction Policy__ installed.
 
 
-###Get the binary
+### Get the binary
  
 Download it [here](https://github.com/p-acs/ethereum-secure-proxy/releases)   or build it on your own ( __mvn package__ )
 
-###Run the proxy
+### Run the proxy
 
     java -jar ethereum-secure-proxy-VERSION.jar --url http://ETHEREUM-NODE-IP:PORT
 
