@@ -21,24 +21,22 @@ package de.petendi.ethereum.secure.proxy;
  * #L%
  */
 
-import java.util.HashMap;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.googlecode.jsonrpc4j.JsonRpcClient;
 
-public class Settings {
+class JsonRpcRequestListener implements JsonRpcClient.RequestListener {
 
-    private final boolean whisperAllowed;
-    private final HashMap<String,String> headers;
+    private static final String ID = "id";
 
-
-    public Settings(boolean whisperAllowed, HashMap<String, String> headers) {
-        this.whisperAllowed = whisperAllowed;
-        this.headers = headers;
+    @Override
+    public void onBeforeRequestSent(JsonRpcClient jsonRpcClient, ObjectNode objectNode) {
+        int id = Integer.valueOf(objectNode.get(ID).asText());
+        objectNode.remove(ID);
+        objectNode.put(ID, id);
     }
 
-    public boolean isWhisperAllowed() {
-        return whisperAllowed;
-    }
-
-    public HashMap<String, String> getHeaders() {
-        return headers;
+    @Override
+    public void onBeforeResponseProcessed(JsonRpcClient jsonRpcClient, ObjectNode objectNode) {
+        //ignore
     }
 }

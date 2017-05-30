@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 
 @Configuration
@@ -55,6 +56,7 @@ public class Application {
     private static Seccoco seccoco = null;
     private static JsonRpcHttpClient jsonRpcHttpClient = null;
     private static CmdLineResult cmdLineResult;
+    private static Settings settings;
 
     public static void main(String[] args) {
 
@@ -103,12 +105,24 @@ public class Application {
         try {
             System.out.println("Connecting to Ethereum RPC at " + cmdLineResult.getUrl());
             URL url = new URL(cmdLineResult.getUrl());
+            HashMap<String,String> headers = new HashMap<String,String>();
+            headers.put("Content-Type","application/json");
+            String additionalHeaders = cmdLineResult.getAdditionalHeaders();
+            if(additionalHeaders != null) {
+                StringTokenizer tokenizer = new StringTokenizer(additionalHeaders,",");
+                while(tokenizer.hasMoreTokens()) {
+                    String keyValue = tokenizer.nextToken();
+                    StringTokenizer innerTokenizer = new StringTokenizer(keyValue,":");
+                    headers.put(innerTokenizer.nextToken(),innerTokenizer.nextToken());
+                }
+            }
+            settings = new Settings(cmdLineResult.isExposeWhisper(),headers);
             jsonRpcHttpClient = new JsonRpcHttpClient(url);
-            HashMap<String,String> header = new HashMap<String,String>();
-            header.put("Content-Type","application/json");
-            jsonRpcHttpClient.invoke("eth_protocolVersion", null,Object.class,header);
+            jsonRpcHttpClient.setRequestListener(new JsonRpcRequestListener());
+
+            jsonRpcHttpClient.invoke("eth_protocolVersion", null,Object.class,headers);
             if (cmdLineResult.isExposeWhisper()) {
-                jsonRpcHttpClient.invoke("shh_version", null, Object.class, header);
+                jsonRpcHttpClient.invoke("shh_version", null, Object.class, headers);
             }
             System.out.println("Connection succeeded");
         } catch (Throwable e) {
@@ -149,6 +163,7 @@ public class Application {
 
     @Bean
     public Settings settings() {
-        return new Settings(cmdLineResult.isExposeWhisper());
+        return settings;
     }
+
 }

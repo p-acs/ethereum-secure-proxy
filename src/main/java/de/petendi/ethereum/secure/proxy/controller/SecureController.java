@@ -94,9 +94,8 @@ public class SecureController {
             if (wrappedRequest.getCommand().startsWith("shh_") && !settings.isWhisperAllowed()) {
                 throw new SecurityException("command not allowed: " + wrappedRequest.getCommand());
             }
-            HashMap<String,String> header = new HashMap<String,String>();
-            header.put("Content-Type","application/json");
-            Object response = rpcClient.invoke(allowedCommand.toString(), wrappedRequest.getParameters(), Object.class,header);
+
+            Object response = rpcClient.invoke(allowedCommand.toString(), wrappedRequest.getParameters(), Object.class,settings.getHeaders());
             wrappedResponse.setResponse(response);
             wrappedResponse.setSuccess(true);
         } catch (Throwable e) {

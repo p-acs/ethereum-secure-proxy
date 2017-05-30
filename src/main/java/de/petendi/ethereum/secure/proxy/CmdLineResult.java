@@ -40,6 +40,9 @@ public class CmdLineResult {
     @Option(name = "--url", required = true, usage = "The url to the Ethereum RPC endpoint", metaVar = "required")
     private String url;
 
+    @Option(name = "--additionalHeaders", required = false, usage = "Comma separated list of HTTP headers to be included", metaVar = "optional")
+    private String additionalHeaders;
+
     @Option(name = "--exposeWhisper", required = false, usage = "Expose whisper (shh) RPC commands", metaVar = "optional")
     private boolean exposeWhisper = false;
 
@@ -69,6 +72,10 @@ public class CmdLineResult {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getAdditionalHeaders() {
+        return additionalHeaders;
     }
 
     public boolean isExposeWhisper() {
